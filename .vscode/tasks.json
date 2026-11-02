@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bootstrap",
+      "type": "shell",
+      "command": "./scripts/bootstrap",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build firmware",
+      "type": "shell",
+      "command": "./scripts/pio run",
+      "group": "build",
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Upload",
+      "type": "shell",
+      "command": "./scripts/pio run -t upload",
+      "problemMatcher": []
+    },
+    {
+      "label": "Monitor",
+      "type": "shell",
+      "command": "./scripts/pio device monitor",
+      "problemMatcher": []
+    },
+    {
+      "label": "Host tests and table",
+      "type": "shell",
+      "command": "./scripts/test",
+      "group": "test",
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Interactive virtual table",
+      "type": "shell",
+      "command": "./scripts/ui",
+      "problemMatcher": []
+    },
+    {
+      "label": "UI bridge tests",
+      "type": "shell",
+      "command": "./scripts/test-ui",
+      "problemMatcher": [
+        "$gcc"
+      ]
+    }
+  ]
+}

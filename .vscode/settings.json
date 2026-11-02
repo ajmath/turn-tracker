@@ -1,0 +1,5 @@
+{
+  "platformio-ide.useBuiltinPIOCore": false,
+  "platformio-ide.useBuiltinPython": false,
+  "C_Cpp.default.cppStandard": "c++17"
+}

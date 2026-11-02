@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+mkdir -p build
+${CXX:-c++} -std=c++17 -Wall -Wextra -Werror -pedantic -Iinclude sim/ui.cpp -o build/table-ui
+exec .venv/bin/python tests/ui.py

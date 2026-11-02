@@ -1,0 +1,10 @@
+.venv/
+.pio/
+.platformio/
+build/
+__pycache__/
+.DS_Store
+.cache/
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+compile_commands.json

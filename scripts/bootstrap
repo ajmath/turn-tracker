@@ -1,0 +1,11 @@
+#!/bin/sh
+# Explicit provisioning step; normal build/test commands never install software.
+set -eu
+cd "$(dirname "$0")/.."
+command -v uv >/dev/null 2>&1 || {
+  echo 'uv is required; see docs/tooling-log.md' >&2
+  exit 1
+}
+export UV_CACHE_DIR="${UV_CACHE_DIR:-$PWD/.cache/uv}"
+uv venv --managed-python --python "$(cat .python-version)" .venv
+uv pip sync --python .venv/bin/python requirements.txt

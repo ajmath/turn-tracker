@@ -1,0 +1,120 @@
+# Three-puck clean example; replay: build/table 42 clean
+# Excerpt only. Full trace: build/example.trace. * = light on, . = off.
+table 0 LEDs=**. status=1,1,1, queue=6
+table 500 LEDs=... status=1,1,1, queue=0
+table 1000 LEDs=... status=1,1,1, queue=0
+table 1500 LEDs=... status=1,1,1, queue=0
+table 2000 LEDs=**. status=1,1,1, queue=0
+table 2500 LEDs=... status=1,1,1, queue=6
+table 3000 LEDs=... status=1,1,1, queue=0
+table 3500 LEDs=... status=1,1,1, queue=0
+hold 4000 puck=0
+table 4000 LEDs=**. status=1,1,1, queue=0
+table 4500 LEDs=... status=1,1,1, queue=0
+table 5000 LEDs=... status=1,1,1, queue=6
+table 5500 LEDs=... status=1,1,1, queue=0
+table 6000 LEDs=**. status=1,1,1, queue=0
+table 6500 LEDs=... status=1,1,1, queue=0
+table 7000 LEDs=... status=1,1,1, queue=0
+tap 7200 puck=0
+tap 7400 puck=0
+table 7500 LEDs=... status=1,1,1, queue=6
+persist 7530 puck=0 writes=1 membership=0 reservation=281638185467905
+table 8000 LEDs=**. status=2,2,2, queue=2
+table 8500 LEDs=**. status=2,2,2, queue=2
+table 9000 LEDs=**. status=2,2,2, queue=2
+table 9500 LEDs=**. status=2,2,2, queue=2
+table 10000 LEDs=**. status=2,2,2, queue=8
+table 10500 LEDs=**. status=2,2,2, queue=2
+tap 10600 puck=0
+persist 10730 puck=0 writes=2 membership=0 reservation=281638185467905
+table 11000 LEDs=**. status=2,2,2, queue=2
+tap 11100 puck=1
+persist 11230 puck=1 writes=1 membership=0 reservation=281638185467905
+persist 11240 puck=0 writes=3 reservation=281638185467905
+table 11500 LEDs=**. status=2,3,2, queue=2
+tap 11600 puck=2
+persist 11730 puck=2 writes=1 membership=0 reservation=281638185467905
+persist 11740 puck=0 writes=4 reservation=281638185467905
+table 12000 LEDs=**. status=2,3,3, queue=2
+table 12500 LEDs=**. status=2,3,3, queue=8
+table 13000 LEDs=**. status=2,3,3, queue=2
+hold 13100 puck=0
+table 13500 LEDs=**. status=2,3,3, queue=2
+table 14000 LEDs=**. status=2,3,3, queue=2
+table 14500 LEDs=**. status=2,3,3, queue=2
+table 15000 LEDs=**. status=2,3,3, queue=8
+table 15500 LEDs=**. status=2,3,3, queue=2
+table 16000 LEDs=**. status=2,3,3, queue=2
+persist 16230 puck=0 writes=5 membership=281638185467905 reservation=281638185467905
+persist 16240 puck=1 writes=2 reservation=0
+persist 16240 puck=2 writes=2 reservation=0
+persist 16260 puck=0 writes=6 membership=281638185467905 reservation=0
+table 16500 LEDs=... status=6,6,6, queue=4
+table 17000 LEDs=... status=6,6,6, queue=4
+table 17500 LEDs=... status=6,6,6, queue=10
+visible 17760 puck=0 LED=1 status=6 revision=2
+table 18000 LEDs=*.. status=6,6,6, queue=4
+table 18500 LEDs=*.. status=6,6,6, queue=4
+visible 18760 puck=0 LED=0 status=6 revision=2
+visible 18770 puck=1 LED=1 status=6 revision=2
+table 19000 LEDs=.*. status=6,6,6, queue=4
+table 19500 LEDs=.*. status=6,6,6, queue=4
+visible 19770 puck=1 LED=0 status=6 revision=2
+visible 19770 puck=2 LED=1 status=6 revision=2
+table 20000 LEDs=..* status=6,6,6, queue=10
+table 20500 LEDs=..* status=6,6,6, queue=4
+visible 20760 puck=0 LED=1 status=6 revision=2
+visible 20770 puck=1 LED=1 status=6 revision=2
+visible 20970 puck=1 LED=0 status=6 revision=2
+visible 20970 puck=2 LED=0 status=6 revision=2
+table 21000 LEDs=*.. status=6,6,6, queue=4
+table 21500 LEDs=*.. status=6,6,6, queue=4
+table 22000 LEDs=*.. status=6,6,6, queue=4
+table 22500 LEDs=*.. status=6,6,6, queue=10
+table 23000 LEDs=*.. status=6,6,6, queue=4
+table 23500 LEDs=*.. status=6,6,6, queue=4
+table 24000 LEDs=*.. status=6,6,6, queue=4
+table 24500 LEDs=*.. status=6,6,6, queue=4
+table 25000 LEDs=*.. status=6,6,6, queue=10
+table 25500 LEDs=*.. status=6,6,6, queue=4
+table 26000 LEDs=*.. status=6,6,6, queue=4
+table 26500 LEDs=*.. status=6,6,6, queue=4
+table 27000 LEDs=*.. status=6,6,6, queue=4
+table 27500 LEDs=*.. status=6,6,6, queue=10
+table 28000 LEDs=*.. status=6,6,6, queue=4
+tap 28300 puck=0
+table 28500 LEDs=.*. status=6,6,6, queue=4
+table 29000 LEDs=.*. status=6,6,6, queue=4
+table 29500 LEDs=.*. status=6,6,6, queue=4
+table 30000 LEDs=.*. status=6,6,6, queue=10
+table 30500 LEDs=.*. status=6,6,6, queue=4
+table 31000 LEDs=.*. status=6,6,6, queue=4
+table 31500 LEDs=.*. status=6,6,6, queue=4
+table 32000 LEDs=.*. status=6,6,6, queue=4
+tap 32500 puck=0
+table 32500 LEDs=.*. status=6,6,6, queue=10
+table 33000 LEDs=.*. status=6,6,6, queue=4
+table 33500 LEDs=.*. status=6,6,6, queue=4
+tap 33700 puck=1
+table 34000 LEDs=..* status=6,6,6, queue=4
+table 34500 LEDs=..* status=6,6,6, queue=4
+table 35000 LEDs=..* status=6,6,6, queue=10
+table 35500 LEDs=..* status=6,6,6, queue=4
+table 36000 LEDs=..* status=6,6,6, queue=4
+table 36500 LEDs=..* status=6,6,6, queue=4
+table 37000 LEDs=..* status=6,6,6, queue=4
+table 37500 LEDs=..* status=6,6,6, queue=10
+hold 37900 puck=1
+table 38000 LEDs=..* status=6,6,6, queue=4
+table 38500 LEDs=..* status=6,6,6, queue=4
+table 39000 LEDs=..* status=6,6,6, queue=4
+table 39500 LEDs=..* status=6,6,6, queue=4
+table 40000 LEDs=..* status=6,6,6, queue=10
+table 40500 LEDs=..* status=6,6,6, queue=4
+table 41000 LEDs=..* status=6,6,6, queue=4
+table 41500 LEDs=... status=6,6,6, queue=4
+table 42000 LEDs=... status=6,6,6, queue=4
+table 42500 LEDs=... status=6,6,6, queue=10
+tap 42900 puck=1
+table 43000 LEDs=.*. status=6,6,6, queue=4

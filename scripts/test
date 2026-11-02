@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+mkdir -p build
+${CXX:-c++} -std=c++17 -Wall -Wextra -Werror -pedantic -Iinclude tests/core.cpp -o build/core-tests
+build/core-tests
+${CXX:-c++} -std=c++17 -Wall -Wextra -Werror -pedantic -Iinclude sim/table.cpp -o build/table
+build/table "${1:-42}"

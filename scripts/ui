@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+mkdir -p build
+${CXX:-c++} -std=c++17 -Wall -Wextra -Werror -pedantic -Iinclude sim/ui.cpp -o build/table-ui
+if [ ! -x .venv/bin/python ]; then
+  echo 'Run ./scripts/bootstrap first; no extra UI packages are needed.' >&2
+  exit 1
+fi
+exec .venv/bin/python sim/serve.py "$@"
