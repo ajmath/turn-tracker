@@ -1,0 +1,5 @@
+# Isolated CAD environment; not firmware runtime dependencies.
+manifold3d==3.5.4
+trimesh==5.2.0
+numpy==2.5.4
+matplotlib==3.11.2

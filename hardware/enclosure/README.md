@@ -1,0 +1,128 @@
+# Turn-tracker enclosures
+
+Prototype circular enclosures with centered illuminated buttons, rounded top rims,
+recessed USB access, removable bases, and slide-in ESP32-C3 mounts.
+
+| | Option 1 | Option 2 |
+|---|---:|---:|
+| Outside diameter | 90 mm | 70 mm |
+| Height, excluding button cap | 45 mm | 38 mm |
+| Nominal button panel hole | 28.5 mm | 12 mm |
+| Modeled hole with print allowance | 28.8 mm | 12.3 mm |
+| Button depth below panel | 33.3 mm | 17 mm |
+| Battery orientation | On 42 × 10 mm edge | Flat on 42 × 25 mm face |
+
+Walls, roof and base are 2.4 mm thick. The outer top rim has a 2.4 mm round-over.
+Dimensions are millimeters throughout. Physical fits have not been qualified.
+
+## Files and Tinkercad
+
+The ZIP bundles the same STL files found in `stl/`, together with source,
+references, previews, instructions and validation results.
+
+- Import `stl/option-1-exploded.stl` or `stl/option-2-exploded.stl` into Tinkercad
+  at **100% scale, millimeters** to view separated parts on one workplane.
+- Each option also has individual `shell`, `base` and `brace-bar` STLs.
+- `component-layout-REFERENCE` STLs show component placement. Do not print them
+  as enclosures; they contain component solids.
+- `preview.png` shows both layouts; `interface-details.png` shows the mount and
+  USB interface; `brace-bar-detail.png` shows the bar's end section and PCB edge.
+- `puck.scad` and the option wrappers are generated CAD sources. Keep their
+  `reference/` folder alongside them when opening them in OpenSCAD.
+
+## Printing and assembly
+
+Shells are exported roof-down, bases flat, and bars standing on one end. For the
+bar, start with a 5–8 mm brim, 0.16–0.2 mm layers and no supports. Its constant
+section avoids overhangs in that orientation. Print a bar/slot fit sample before
+a full enclosure; printer tolerances can change the sliding fit.
+
+### ESP mount and retaining bar
+
+The PCB underside sits 5.4 mm above the external bottom. The two rails provide
+18.38 mm clear width and a 1.3 mm high edge channel. Slide the board in from the
+center of the case, with the USB connector toward the side opening. The PCB's
+21 mm direction points toward USB. The mount assumes clear edges and no headers.
+
+The retaining bar's end section is extruded unchanged for its full 30 mm length:
+rectangular body, sloping nose, and a notch around the PCB rear edge. Both posts
+have the negative of this section expanded by 0.2 mm for sliding clearance. The
+1.3 mm notch leaves 0.15 mm above and below the supplied model's 1 mm PCB. Its
+lips overlap the rear edge by 0.15 mm, avoiding the model's rear components.
+
+Install the board first, then slide the complete rigid bar laterally through
+both sockets. Pull or push the bar sideways to remove it. It has no flexible
+snap head or positive axial latch. Attach the battery after inserting the board
+and bar; the battery can obstruct their insertion paths. Fit wiring and antenna
+cable before closing the shell.
+
+### Battery
+
+Option 1 has a 44 mm wide, 2 mm thick tape panel leaning 8° away from the center,
+with two rear triangular braces. A bottom shelf supports the battery's 10 mm
+edge, and a 2.5 mm front lip prevents slipping. Seat the battery on the shelf,
+then press it against tape on the sloped face. Gravity bears on the shelf and
+into the panel. The reference placement allows 0.3 mm tape thickness.
+
+Option 2 leaves a flat interior area for double-sided tape beneath the button.
+Battery guides and strap slots are not fitted.
+
+### USB, switch and shell
+
+USB access is 9.6 × 4.8 mm with 1.8 mm corner radii, centered 7.51 mm above the
+external bottom. Its 11.6 × 6.8 mm recess has 2.8 mm radii, leaving a 1 mm border,
+and is 2.1 mm deep at its center. A base upstand and the shell meet around the
+socket with 0.1 mm nominal assembly clearance. The metal cable plug enters the
+opening; check the cable housing stays clear outside it.
+
+The slide switch glues directly to the interior base between two L guides with
+inner faces 10 mm apart. Guides and shell cutout are 5.6 mm high. The bracket
+position is inset 3 mm from the original layout. Verify actual flange, terminal
+and actuator geometry, especially actuator reach through the shell.
+
+Three underside screws attach the shell: 3.2 mm base holes and 2.5 mm pilots for
+provisional 3 mm self-tappers. Use about 6 mm engagement; select actual lengths
+and pilot sizes for the print. Add feet to clear screw heads.
+
+## Reference geometry and validation
+
+PCB and USB geometry were extracted from the supplied Seeed Studio XIAO-ESP32-C3
+STEP model using OpenCascade. Measured model bounds are 20.955 × 17.78 × 1 mm for
+the PCB and 7.3 × 8.94 × 4.2 mm for the connector, which projects about 1.508 mm
+beyond the PCB. These are model dimensions, not manufacturing tolerances.
+
+`reference/board.stl` contains the normalized board solids and `reference/usb.stl`
+the connector. PCB underside is Z=0, PCB front is Y=0, and USB points toward +Y.
+`reference/measurements.json` records the source bounds and coordinate mapping.
+
+The generator checks positive-volume collisions between modeled parts/components,
+constant bar section area, and closed meshes with consistent winding. It samples
+97 board insertion positions and 73 complete rigid-bar insertion positions per
+option, with shell and battery absent. Results and mesh bounds are recorded in
+`validation.json`; printable STL files are also reloaded to check export integrity.
+
+These checks do not establish physical fit, structural strength, cable fit or
+printer tolerances. Button body/nut/bezel envelopes, LED driver, antenna cable,
+soldered wires, and switch flange/terminals remain incompletely modeled. The
+button body currently uses its panel-hole diameter as a provisional envelope.
+No physical print, slicer verification or Tinkercad import has been performed.
+
+## Regeneration
+
+`generate.py` is the source of dimensions and emits equivalent SCAD and STL CSG
+geometry. Open `option-1.scad` or `option-2.scad` for viewing; supported `part`
+values are `assembly`, `layout`, `shell`, `base`, and `brace-bar`. Change dimensions
+in `design()` and regenerate to keep sources and exports synchronized. OpenSCAD
+itself is not required for generation and has not been executed here.
+
+Use an isolated environment; dependencies are separate from firmware tooling:
+
+```sh
+python3 -m venv /tmp/turn-tracker-cad
+/tmp/turn-tracker-cad/bin/python -m pip install -r hardware/enclosure/requirements-cad.txt
+MPLCONFIGDIR=/tmp/turn-tracker-mpl /tmp/turn-tracker-cad/bin/python hardware/enclosure/generate.py
+```
+
+Generation refreshes SCAD, STL, previews, validation and `tinkercad-enclosures.zip`.
+The supplied normalized reference meshes are inputs; regenerating enclosures does
+not require OpenCascade or access to the original Downloads folder.

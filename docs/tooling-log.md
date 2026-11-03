@@ -1,5 +1,16 @@
 # Tooling needs and installation log
 
+## Enclosure CAD exports (2026-11-02)
+
+STL generation uses Manifold, trimesh, NumPy and Matplotlib, pinned separately in
+`hardware/enclosure/requirements-cad.txt`. They were installed into an isolated
+temporary environment at `/private/tmp/turn-tracker-cad-venv`; no machine-wide
+software or firmware environment was changed. `generate.py` emits matching SCAD
+and STL geometry, checks modeled collisions and mesh closure, and renders a
+preview. OpenSCAD itself is not installed; its generated source has not been
+executed in OpenSCAD. Tinkercad imports and physical component fits remain to be
+checked by the user.
+
 Keep this file current as implementation discovers requirements. Do not install new
 machine-wide software automatically. Review and batch installations with the user,
 using each toolchain's appropriate manager. There is intentionally no Brewfile.
@@ -83,3 +94,12 @@ UI validation passed: native bridge/replay tests, existing core/table regression
 suite (seeds 42, 1, 7, 999, 4294967295), JavaScript syntax, Python compilation,
 and shell syntax. Browser smoke test completed real enrollment, ordered selection,
 finalization, and passing; the local UI was left open on a paused three-puck game.
+
+## Enclosure STEP reference update (2026-11-03)
+
+Added cadquery-ocp 8.0.1.1.0 (and its VTK dependency) only to the temporary CAD
+environment to read the user-supplied STEP. Extracted PCB/socket bounds and
+normalized reference STLs. Revised exports pass board/base insertion sampling
+(97 positions per option), collision checks, and printable STL reload checks.
+The reference model and measured bounds are saved under hardware/enclosure/reference.
+No machine-wide install or firmware environment changes.

@@ -168,3 +168,9 @@ The battery switch must be on to charge. USB may power the board with it off.
 
 Simulation cannot establish electrical safety, switch behavior, RF range,
 brightness, real timing, charging compatibility, or battery runtime.
+
+## Printable enclosures
+
+Two centered-button puck designs, printable STLs, editable CAD sources, component
+references and Tinkercad import instructions are in [hardware/enclosure](hardware/enclosure/README.md).
+The designs are geometry-checked prototypes; physical component fits remain unverified.
