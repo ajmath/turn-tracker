@@ -13,7 +13,9 @@ recessed USB access, removable bases, and slide-in ESP32-C3 mounts.
 | Battery orientation | On 42 × 10 mm edge | Flat on 42 × 25 mm face |
 
 Walls, roof and base are 2.4 mm thick. The outer top rim has a 2.4 mm round-over.
-Dimensions are millimeters throughout. Physical fits have not been qualified.
+Dimensions are millimeters throughout. The user successfully test-printed the
+previous bar. This reinforced revision and actual component fits remain unverified;
+the components have arrived and the first fit adjustments are incorporated below.
 
 ## Files and Tinkercad
 
@@ -40,15 +42,24 @@ a full enclosure; printer tolerances can change the sliding fit.
 ### ESP mount and retaining bar
 
 The PCB underside sits 5.4 mm above the external bottom. The two rails provide
-18.38 mm clear width and a 1.3 mm high edge channel. Slide the board in from the
+18.78 mm clear width and a 1.7 mm high edge channel. Slide the board in from the
 center of the case, with the USB connector toward the side opening. The PCB's
 21 mm direction points toward USB. The mount assumes clear edges and no headers.
 
-The retaining bar's end section is extruded unchanged for its full 30 mm length:
-rectangular body, sloping nose, and a notch around the PCB rear edge. Both posts
-have the negative of this section expanded by 0.2 mm for sliding clearance. The
-1.3 mm notch leaves 0.15 mm above and below the supplied model's 1 mm PCB. Its
-lips overlap the rear edge by 0.15 mm, avoiding the model's rear components.
+The bar retains its original exterior profile and 30 mm length. Its PCB notch
+is enlarged from 1.3 to 1.7 mm high, with 0.2 mm more clearance on its rear contact
+face. The base side channels gain 0.2 mm per side and above/below the PCB; the
+front stop is relieved an extra 0.2 mm. These are initial fit adjustments after
+components arrived, and need another physical fit check.
+
+The socket roof is retained over the **sloped section**, which provides retention.
+Only the flat rear roof is removed. Rear walls remain 1.8 mm thick, built outward.
+The bar-to-socket sliding clearance stays 0.2 mm. The generation checks explicitly
+verify that the sloped roof exists and the flat roof stays open.
+
+Outside diameters stay 90 / 70 mm and both shell files are unchanged. Option 2
+battery placement remains unqualified at the user's request. Any intersections
+with its illustrative battery are reported in `validation.json`.
 
 Install the board first, then slide the complete rigid bar laterally through
 both sockets. Pull or push the bar sideways to remove it. It has no flexible
@@ -59,7 +70,9 @@ cable before closing the shell.
 ### Battery
 
 Option 1 has a 44 mm wide, 2 mm thick tape panel leaning 8° away from the center,
-with two rear triangular braces. A bottom shelf supports the battery's 10 mm
+with two rear triangular braces. The space under the projecting shelf is
+filled solid across its full 44 mm width, down to the base; no individual shelf
+ribs are used. A bottom shelf supports the battery's 10 mm
 edge, and a 2.5 mm front lip prevents slipping. Seat the battery on the shelf,
 then press it against tape on the sloped face. Gravity bears on the shelf and
 into the panel. The reference placement allows 0.3 mm tape thickness.
@@ -76,8 +89,11 @@ socket with 0.1 mm nominal assembly clearance. The metal cable plug enters the
 opening; check the cable housing stays clear outside it.
 
 The slide switch glues directly to the interior base between two L guides with
-inner faces 10 mm apart. Guides and shell cutout are 5.6 mm high. The bracket
-position is inset 3 mm from the original layout. Verify actual flange, terminal
+inner faces 10.4 mm apart (0.4 mm wider). Both legs of each L are 3 mm thick, tripled from
+1 mm. The rear pocket face is relieved 0.2 mm for fit. Long arms are shortened
+from 8.6 to 7.6 mm; both brackets move 1 mm radially toward the edge. Guides and shell cutout
+are 5.6 mm high. The bracket
+position is now inset 2 mm from the original layout. Verify actual flange, terminal
 and actuator geometry, especially actuator reach through the shell.
 
 Three underside screws attach the shell: 3.2 mm base holes and 2.5 mm pilots for
@@ -98,14 +114,18 @@ the connector. PCB underside is Z=0, PCB front is Y=0, and USB points toward +Y.
 The generator checks positive-volume collisions between modeled parts/components,
 constant bar section area, and closed meshes with consistent winding. It samples
 97 board insertion positions and 73 complete rigid-bar insertion positions per
-option, with shell and battery absent. Results and mesh bounds are recorded in
+option, with shell and battery absent. Option 2 battery intersections are explicitly
+excluded while its placement is deferred; all other modeled collision checks remain
+enforced. Results and mesh bounds are recorded in
 `validation.json`; printable STL files are also reloaded to check export integrity.
 
 These checks do not establish physical fit, structural strength, cable fit or
 printer tolerances. Button body/nut/bezel envelopes, LED driver, antenna cable,
 soldered wires, and switch flange/terminals remain incompletely modeled. The
 button body currently uses its panel-hole diameter as a provisional envelope.
-No physical print, slicer verification or Tinkercad import has been performed.
+The earlier bar was test-printed successfully by the user; that does not qualify
+this thicker revision or component fit. No slicer verification or Tinkercad import
+has been performed here.
 
 ## Regeneration
 

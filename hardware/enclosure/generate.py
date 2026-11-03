@@ -92,17 +92,18 @@ def design(option):
     # Bottom-edge notch lets the shell drop over the glued-in slide switch.
     # Body lies directly on base, with actuator directed radially outward.
     switch_angle=45
-    sx=R-t-6.6-3
+    sx=R-t-6.6-2
     shell=shell-box(10,14,5.7,(R-8,-7,t-.1)).rotate(z=switch_angle)
     base=profile(R,t)
     for x,y in screw_points: base=base-cyl(1.6,t+.2,(x,y,-.1))
     # Base upstand meets shell at USB center; it closes the old large notch.
     lower_lip=box(16,R-lip_start+1,seam-t,(-8,lip_start,t)) & profile(R,H)
-    lower_lip=lower_lip-box(24,1.3,1.4,(-12,lip_start-.1,pcbz-.1))
+    lower_lip=lower_lip-box(24,1.5,1.8,(-12,lip_start-.1,pcbz-.3))
     base=base+(lower_lip-access-recess)
     # Constant Y/Z section: rectangular spine and notched nose around PCB edge.
+    # Existing bar exterior, with PCB-contact notch relieved by 0.2 mm per face.
     section=[[-4.6,-1.1],[-1.8,-1.1],[-1.8,.1],[.15,-1.2],
-             [.15,-.15],[-.15,-.15],[-.15,1.15],[.15,1.15],
+             [.15,-.35],[-.35,-.35],[-.35,1.35],[.15,1.35],
              [.15,2.2],[-1.8,.9],[-1.8,2.1],[-4.6,2.1]]
     def section_bar(length,x,clearance=0):
         cross=md.CrossSection([section])
@@ -113,17 +114,27 @@ def design(option):
         return shape.rotate(x=90,z=90).move(x=x,y=rear,z=pcbz)
     bar=section_bar(30,-15)
     # Confirm identical section area at both ends and the center.
-    volumes=[(bar.mesh ^ box(1,12,10,(x,rear-7,pcbz-3)).mesh).volume() for x in [-14,0,13]]
+    volumes=[(bar.mesh ^ box(1,16,16,(x,rear-12,pcbz-3)).mesh).volume() for x in [-14,0,13]]
     assert max(volumes)-min(volumes)<1e-5, 'Nonconstant bar section'
     socket=section_bar(40,-20,.2)
+    # Open the cap over the committed cavity; keep its lower profile and walls.
+    # Cutter overlaps the cavity so no zero-thickness roof fragments remain.
+    roof_cut=box(40,3.01,10,(-20,rear-4.81,pcbz+.9))
     for sign in [-1,1]:
         x0=8.3 if sign>0 else -11
         rail=box(2.7,20.955,pcbz+2.1-t,(x0,rear,t-.1))
         post_x=8.3 if sign>0 else -14
-        rail=rail+box(5.7,7,pcbz+3-t,(post_x,rear-5.4,t-.1))
-        rail=rail-box(18.38,28,1.3,(-9.19,rear-5.5,pcbz))
-        # Exact negative of the full bar profile, expanded 0.2 mm for sliding.
+        # Original front/height; add 1.2 mm only behind the existing rear wall.
+        post=box(5.7,8.2,pcbz+3-t,(post_x,rear-6.6,t-.1))
+        post=post-socket-roof_cut
+        slope_probe=box(1,.4,.4,(post_x+1,rear-.8,pcbz+2.2))
+        flat_probe=box(1,.5,.3,(post_x+1,rear-3.5,pcbz+2.5))
+        assert (post.mesh ^ slope_probe.mesh).volume()>.1, 'Missing sloped retention roof'
+        assert (post.mesh ^ flat_probe.mesh).volume()<1e-5, 'Flat roof must stay open'
+        rail=rail+post
+        rail=rail-box(18.78,30,1.7,(-9.39,rear-6.7,pcbz-.2))
         rail=rail-socket
+        assert (rail.mesh ^ socket.mesh).volume()<1e-5, 'Changed socket interior'
         base=base+(rail & profile(R-t-.2,H))
     if large:
         # 8 degrees away from center: gravity loads the tape face and ledge.
@@ -135,14 +146,18 @@ def design(option):
         triangle=prism_xy([[-37,0],[-30.2,0],[-32.9,26]],2)
         for x in [-17,15]:
             panel=panel+triangle.rotate(x=90,z=90).move(x=x,z=t-.1)
+        # Full-width solid infill from the base to the sloping shelf underside.
+        # Top overlaps underside slightly for a single connected printed solid.
+        fill=prism_xy([[-28.3,0],[-16.4,0],[-16.4,1.811],[-28.3,.138]],44)
+        panel=panel+fill.rotate(x=90,z=90).move(x=-22,z=t-.1)
         base=base+panel
-    # Two L guides, inner faces exactly 10 mm apart. Glue switch on base.
+    # 10.4 mm clear switch pocket; 3 mm walls and 1 mm shorter arms.
     # Each has a short rear return; no platform or overhanging clamp.
     guides=combine([
-        box(6.6,1,5.7,(sx,-6,t-.1)),
-        box(1,2.2,5.7,(sx,-6,t-.1)),
-        box(6.6,1,5.7,(sx,5,t-.1)),
-        box(1,2.2,5.7,(sx,3.8,t-.1)),
+        box(7.6,3,5.7,(sx-2.2,-8.2,t-.1)),
+        box(3,4.2,5.7,(sx-2.2,-8.2,t-.1)),
+        box(7.6,3,5.7,(sx-2.2,5.2,t-.1)),
+        box(3,4.2,5.7,(sx-2.2,4,t-.1)),
     ]).rotate(z=switch_angle)
     base=base+guides
     refs={
@@ -153,10 +168,14 @@ def design(option):
     }
     refs['usb']=reference('usb').move(y=front,z=pcbz)
     parts={'shell':shell,'base':base,'brace-bar':bar}
+    known_battery_intersections=[]
     for name,a in parts.items():
         for ref,b in refs.items():
             overlap=(a.mesh^b.mesh).volume()
-            # PCB ledges touch at faces; permit only numerical rounding.
+            # Option 2 battery placement is explicitly deferred by the user.
+            if not large and ref=='battery':
+                if overlap>1e-5: known_battery_intersections.append({'part':name,'overlap_mm3':round(overlap,3)})
+                continue
             if overlap>1e-5: raise ValueError(f'Option {option}: {name} collides with {ref}: {overlap}')
     for i,(name,a) in enumerate(parts.items()):
         for name2,b in list(parts.items())[i+1:]:
@@ -165,6 +184,7 @@ def design(option):
     for i,(name,a) in enumerate(refs.items()):
         for name2,b in list(refs.items())[i+1:]:
             if {name,name2}=={'esp','usb'}: continue
+            if not large and 'battery' in (name,name2): continue
             if (a.mesh^b.mesh).volume()>1e-5: raise ValueError(f'Component collision {option}: {name}/{name2}')
     # Check insertion with shell/bar/battery absent: install board before battery.
     for offset in np.linspace(-24,0,97):
@@ -174,7 +194,7 @@ def design(option):
         moving=bar.move(x=float(offset)).mesh
         assert (base.mesh ^ moving).volume()<1e-5, f'Bar insertion obstruction {option}, {offset}'
         assert (refs['esp'].mesh ^ moving).volume()<1e-5, f'Bar/board insertion obstruction {option}'
-    params={'bar_insertion_samples':73,'bar_insertion_check':'full rigid bar, including board notch, through both matching sockets','battery_tilt_degrees':8 if large else 0,'battery_bottom_catch':large,'battery_panel_size':[44,27,2] if large else None,'bar_slot_clearance':.2,'bar_profile':'constant extruded YZ section','pcb_notch_height':1.3,'bar_print_rotation_y':90,'switch_radial_inset_change':3,'battery_panel':large,'switch_cutout_height':5.6,'switch_guide_height':5.6,'usb_corner_radius':1.8,'usb_recess_border':1.0,'top_edge_radius':2.4,'usb_access_width':9.6,'usb_access_height':4.8,'insertion_samples':97,'diameter':D,'height':H,'usb_recess_back_y':front,'button_hole_nominal':hole,'button_hole_modeled':hole+.3,'battery_xyz':[42,bd,bh],'board_bottom_z':pcbz,'usb_opening_center_z':usb_z,'button_terminal_bottom_z':H-t-depth}
+    params={'switch_wall_thickness':3,'bar_back_wall_depth':2.8,'bar_back_wall_height':3.2,'pcb_channel_width':18.78,'pcb_channel_height':1.7,'pcb_contact_relief_per_face':.2,'front_stop_extra_clearance':.2,'switch_clear_width':10.4,'switch_arm_length':7.6,'switch_moved_outward':1,'bar_post_rear_wall_thickness':1.8,'bar_post_top_open':'flat section only','bar_post_roof':'sloped section retained','option_2_battery_placement_deferred':not large,'known_battery_intersections':known_battery_intersections,'battery_shelf_support':'full-width solid fill' if large else None,'bar_insertion_samples':73,'bar_insertion_check':'full rigid bar, including board notch, through both matching sockets','battery_tilt_degrees':8 if large else 0,'battery_bottom_catch':large,'battery_panel_size':[44,27,2] if large else None,'bar_slot_clearance':.2,'bar_profile':'constant extruded YZ section','pcb_notch_height':1.7,'bar_print_rotation_y':90,'switch_radial_inset_change':2,'battery_panel':large,'switch_cutout_height':5.6,'switch_guide_height':5.6,'usb_corner_radius':1.8,'usb_recess_border':1.0,'top_edge_radius':2.4,'usb_access_width':9.6,'usb_access_height':4.8,'insertion_samples':97,'diameter':D,'height':H,'usb_recess_back_y':front,'button_hole_nominal':hole,'button_hole_modeled':hole+.3,'battery_xyz':[42,bd,bh],'board_bottom_z':pcbz,'usb_opening_center_z':usb_z,'button_terminal_bottom_z':H-t-depth}
     return parts,refs,params
 
 def mesh(shape):
@@ -223,7 +243,7 @@ if __name__=='__main__':
         scad.append(f'color([.4,.6,.8]) o{option}_brace_bar();\n}}\n}}\n')
         (OUT/f'option-{option}.scad').write_text(f'// Option {option}: centered button, {params["diameter"]} mm circular puck with local USB recess.\ninclude <puck.scad>\noption={option};\n')
     (OUT/'puck.scad').write_text(''.join(scad))
-    (OUT/'validation.json').write_text(json.dumps({'parameters':data,'checks':'All modeled part/part and component/part intersections checked; zero positive-volume collisions. All meshes watertight with consistent winding.','files':records},indent=2)+'\n')
+    (OUT/'validation.json').write_text(json.dumps({'parameters':data,'checks':'Part/part and component/part intersections checked; option 2 battery placement explicitly deferred with known intersections recorded in parameters. All meshes watertight with consistent winding.','files':records},indent=2)+'\n')
     # A consistent preview of the actual exported mesh geometry.
     import matplotlib
     matplotlib.use('Agg')
@@ -262,7 +282,7 @@ if __name__=='__main__':
         ax.set_xlim(-14,14);ax.set_ylim(rear-5,R+1);ax.set_zlim(0,14)
         ax.set_box_aspect((28,R-rear+6,14));ax.view_init(elev=38 if j==0 else 0,azim=110 if j==0 else 90)
         ax.set_axis_off();ax.set_facecolor('#f5f4f0')
-        ax.set_title('Matching sockets · constant-section brace bar' if j==0 else 'USB opening · base and shell assembled',fontsize=11)
+        ax.set_title('Bar posts · sloped roof retained, flat roof open' if j==0 else 'USB opening · base and shell assembled',fontsize=11)
     detail.tight_layout();detail.savefig(OUT/'interface-details.png',dpi=170)
     # End-on section: actual bar (red) and supplied PCB (green).
     figbar,axb=plt.subplots(figsize=(7,4),facecolor='#f5f4f0')
@@ -271,8 +291,8 @@ if __name__=='__main__':
     axb.add_collection(PolyCollection(bm.triangles[keep][:,:,[1,2]],facecolors='#cf4d57',edgecolors='none'))
     rr=designs[0][2]['usb_recess_back_y']-20.955; zz=designs[0][2]['board_bottom_z']
     axb.add_patch(plt.Rectangle((rr,zz),3,1,facecolor='#54ae78'))
-    axb.set_xlim(rr-5.2,rr+2.5);axb.set_ylim(zz-1.8,zz+2.8)
-    axb.set_aspect('equal');axb.axis('off');axb.set_title('Bar end section · identical along entire 30 mm length\nGreen: PCB edge within the notch',fontsize=12)
+    axb.set_xlim(rr-11,rr+2.5);axb.set_ylim(zz-1.8,zz+2.8)
+    axb.set_aspect('equal');axb.axis('off');axb.set_title('Bar section · relaxed PCB notch\nGreen: PCB rear edge',fontsize=12)
     figbar.tight_layout();figbar.savefig(OUT/'brace-bar-detail.png',dpi=170)
     with zipfile.ZipFile(OUT/'tinkercad-enclosures.zip','w',zipfile.ZIP_DEFLATED) as z:
         for name in sorted(records): z.write(OUT/'stl'/name,'stl/'+name)

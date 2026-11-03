@@ -103,3 +103,26 @@ normalized reference STLs. Revised exports pass board/base insertion sampling
 (97 positions per option), collision checks, and printable STL reload checks.
 The reference model and measured bounds are saved under hardware/enclosure/reference.
 No machine-wide install or firmware environment changes.
+
+## Enclosure reinforcement after user test print
+
+User reported that the committed retaining bar printed and worked; component fit
+is still unconfirmed while awaiting parts. Switch walls are tripled outward while
+preserving interior faces. Socket interior geometry and the bar are restored
+exactly from the committed design. Only socket roofs are removed and rear walls
+are increased outward from 0.6 to 1.8 mm. Bar STLs and shells are byte-identical
+to their committed files. Option 1 shelf underside is filled solid across its
+full width. Outside diameters remain 90 / 70 mm. Option 2 battery placement is
+explicitly deferred by the user and excluded from fit qualification; any known
+reference-envelope intersections are recorded. All other collision/insertion
+checks remain enforced. Revised component fit remains unconfirmed.
+
+## First component fit adjustments
+
+Components have arrived. Added 0.2 mm per PCB-contact face in base channels and
+bar notch, plus 0.2 mm front-stop clearance. Restored the sloped retaining roof
+while keeping the flat socket roof open. Widened the switch pocket 0.4 mm, relieved
+its rear face 0.2 mm, shortened long bracket arms 1 mm and moved brackets 1 mm
+outward. Nominal diameters and shells remain unchanged. These new clearances
+need another physical fit check. Geometry checks verify sloped-roof presence,
+flat-roof removal, board/bar insertion and export integrity.
