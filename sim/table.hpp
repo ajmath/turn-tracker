@@ -110,9 +110,9 @@ public:
  }
  void conflictScenario(){
   run(4000);
-  for(size_t i=0;i<2;++i)pucks[i].down=true;run(3100);
-  for(size_t i=0;i<2;++i)pucks[i].down=false;run(100);
-  for(unsigned tap=0;tap<2;++tap){for(size_t i=0;i<2;++i)pucks[i].down=true;run(100);for(size_t i=0;i<2;++i)pucks[i].down=false;run(100);}
+  for(size_t i=0;i<2;++i){pucks[i].down=true;}run(3100);
+  for(size_t i=0;i<2;++i){pucks[i].down=false;}run(100);
+  for(unsigned tap=0;tap<2;++tap){for(size_t i=0;i<2;++i){pucks[i].down=true;}run(100);for(size_t i=0;i<2;++i){pucks[i].down=false;}run(100);}
   run(8000);require(!pucks[0].disk.saved.pending.id&&!pucks[1].disk.saved.pending.id,"contenders withdraw");
   setup(3);consistent(3);
   Message hint;hint.sender=pucks[2].mac;hint.kind=Kind::Presence;hint.membership=pucks[0].disk.saved.committed;hint.membership.id+=99;
@@ -121,9 +121,10 @@ public:
   Message malformed;malformed.sender=pucks[1].mac;auto bad=encode(malformed);bad[2]=99;
   auto rejectBefore=pucks[0].core->rejected;pucks[0].core->receive(pucks[0].clock(time),pucks[1].mac,bad.data(),bad.size(),sender(0));require(pucks[0].core->rejected==rejectBefore+1,"unsupported version rejected");
   Message flood;flood.sender=pucks[1].mac;auto packet=encode(flood);auto beforeDrops=dropped;
-  for(unsigned i=0;i<100;++i)queue.push_back({time,1,0,packet});run(2000);require(dropped>beforeDrops,"bounded receive queue overflow");consistent(3);
+  for(unsigned i=0;i<100;++i){queue.push_back({time,1,0,packet});}
+  run(2000);require(dropped>beforeDrops,"bounded receive queue overflow");consistent(3);
   auto immutableOrder=pucks[0].disk.saved.committed.order;
-  for(size_t i=0;i<2;++i)pucks[i].down=true;run(3100);for(size_t i=0;i<2;++i)pucks[i].down=false;run(7100);
+  for(size_t i=0;i<2;++i){pucks[i].down=true;}run(3100);for(size_t i=0;i<2;++i){pucks[i].down=false;}run(7100);
   require(pucks[0].core->activePosition()==0,"simultaneous claims serialized");require(pucks[0].disk.saved.committed.order==immutableOrder,"competing claims preserve order");
   // Asymmetric failure pauses rather than silently skipping the unreachable node.
   blocked[1][0]=true;run(5000);require(!pucks[0].core->isPlaying(),"asymmetric failure pauses");blocked[1][0]=false;run(5000);consistent(3);
@@ -157,7 +158,8 @@ public:
   reboot(1);run(6500);consistent(pucks.size());require(pucks[1].core->activePosition()==0,"participant restart recovers turn");
   isolated=1;partition=true;run(5000);require(!pucks[0].core->isPlaying(),"member loss pauses");partition=false;run(6000);consistent(pucks.size());
   reboot(0);run(9000);for(auto& p:pucks)require(!p.core->isPlaying(),"coordinator restart requires claim");hold(0);run(9000);consistent(pucks.size());
-  for(size_t i=0;i<pucks.size();++i)reboot(i);run(9000);for(auto& p:pucks)require(!p.core->isPlaying(),"all restart awaits claim");hold(0);run(9000);consistent(pucks.size());
+  for(size_t i=0;i<pucks.size();++i){reboot(i);}
+  run(9000);for(auto& p:pucks)require(!p.core->isPlaying(),"all restart awaits claim");hold(0);run(9000);consistent(pucks.size());
   // Acknowledged pending selections survive restart before the final decision.
   enroll(0);tap(0);tap(1);run(1000);require(pucks[0].disk.saved.pending.count==2,"durable selections");reboot(0);run(2000);hold(0);run(11000);consistent(2);
   require(pucks[0].core->durable.committed.count==2,"reduction");

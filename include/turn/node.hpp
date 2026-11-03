@@ -182,7 +182,8 @@ public:
    if(durable.deciding&&coordinator())return;
    if(invitation&&invitation!=m.enrollment&&uint32_t(now-inviteSeen)<leaseMs){conflict=true;playing=false;status=Status::Conflict;conflictUntil=now+leaseMs;
     Message reply=base(Kind::Conflict,now);reply.enrollment=m.enrollment;send(source,encode(reply));reply.enrollment=invitation;send(inviter,encode(reply));return;}
-   if(invitation!=m.enrollment)enrollmentActivity=now;invitation=m.enrollment;inviter=source;inviteSeen=now;
+   if(invitation!=m.enrollment){enrollmentActivity=now;}
+   invitation=m.enrollment;inviter=source;inviteSeen=now;
    if(!durable.reservation)status=Status::Enrollment;
    return;
   }

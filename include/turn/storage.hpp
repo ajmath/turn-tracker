@@ -22,7 +22,12 @@ inline bool loadBytes(const StorageBytes& b,Durable& d){
  auto read=[&](size_t offset,Membership& member){
   member.id=get64(b.data()+offset+26);member.count=b[offset+40];if(member.count>8)return false;
   for(size_t i=0;i<6;++i)member.coordinator[i]=b[offset+34+i];
-  for(size_t j=0;j<8;++j)for(size_t i=0;i<6;++i)member.order[j][i]=b[offset+41+j*6+i];return true;
+  for(size_t j=0;j<8;++j){
+   for(size_t i=0;i<6;++i){
+    member.order[j][i]=b[offset+41+j*6+i];
+   }
+  }
+  return true;
  };
  Durable value;if(!read(0,value.committed)||!read(wireSize,value.pending))return false;
  if(value.committed.id&&!value.committed.valid())return false;
