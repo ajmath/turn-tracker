@@ -95,15 +95,28 @@ def design(option):
     sx=R-t-6.6-2
     shell=shell-box(10,14,5.7,(R-8,-7,t-.1)).rotate(z=switch_angle)
     base=profile(R,t)
-    for x,y in screw_points: base=base-cyl(1.6,t+.2,(x,y,-.1))
+    clearance_radius = 1.6
+    countersink_radius = 3.5
+    # At 90 degrees included angle, the radius shrinks 1 mm per mm of depth.
+    overcut = 0.1
+    sink_depth = countersink_radius - clearance_radius
+    countersink = Shape(
+        md.Manifold.cylinder(sink_depth + overcut, countersink_radius + overcut,
+                             clearance_radius, SEGMENTS),
+        f'cylinder(h={sink_depth + overcut},r1={countersink_radius + overcut},'
+        f'r2={clearance_radius},$fn={SEGMENTS});',
+    )
+    for x, y in screw_points:
+        base = base - cyl(clearance_radius, t + 2 * overcut, (x, y, -overcut))
+        base = base - countersink.move(x, y, -overcut)
     # Base upstand meets shell at USB center; it closes the old large notch.
     lower_lip=box(16,R-lip_start+1,seam-t,(-8,lip_start,t)) & profile(R,H)
     lower_lip=lower_lip-box(24,1.5,1.8,(-12,lip_start-.1,pcbz-.3))
     base=base+(lower_lip-access-recess)
     # Constant Y/Z section: rectangular spine and notched nose around PCB edge.
-    # Existing bar exterior, with PCB-contact notch relieved by 0.2 mm per face.
+    # Keep the bar exterior, with a 1.5 mm high PCB-contact notch.
     section=[[-4.6,-1.1],[-1.8,-1.1],[-1.8,.1],[.15,-1.2],
-             [.15,-.35],[-.35,-.35],[-.35,1.35],[.15,1.35],
+             [.15,-.25],[-.35,-.25],[-.35,1.25],[.15,1.25],
              [.15,2.2],[-1.8,.9],[-1.8,2.1],[-4.6,2.1]]
     def section_bar(length,x,clearance=0):
         cross=md.CrossSection([section])
@@ -132,7 +145,7 @@ def design(option):
         assert (post.mesh ^ slope_probe.mesh).volume()>.1, 'Missing sloped retention roof'
         assert (post.mesh ^ flat_probe.mesh).volume()<1e-5, 'Flat roof must stay open'
         rail=rail+post
-        rail=rail-box(18.78,30,1.7,(-9.39,rear-6.7,pcbz-.2))
+        rail=rail-box(18.58,30,1.5,(-9.29,rear-6.7,pcbz-.1))
         rail=rail-socket
         assert (rail.mesh ^ socket.mesh).volume()<1e-5, 'Changed socket interior'
         base=base+(rail & profile(R-t-.2,H))
@@ -151,13 +164,13 @@ def design(option):
         fill=prism_xy([[-28.3,0],[-16.4,0],[-16.4,1.811],[-28.3,.138]],44)
         panel=panel+fill.rotate(x=90,z=90).move(x=-22,z=t-.1)
         base=base+panel
-    # 10.4 mm clear switch pocket; 3 mm walls and 1 mm shorter arms.
+    # 10.6 mm clear switch pocket; move each 3 mm wall outward 0.1 mm.
     # Each has a short rear return; no platform or overhanging clamp.
     guides=combine([
-        box(7.6,3,5.7,(sx-2.2,-8.2,t-.1)),
-        box(3,4.2,5.7,(sx-2.2,-8.2,t-.1)),
-        box(7.6,3,5.7,(sx-2.2,5.2,t-.1)),
-        box(3,4.2,5.7,(sx-2.2,4,t-.1)),
+        box(7.6,3,5.7,(sx-2.2,-8.3,t-.1)),
+        box(3,4.2,5.7,(sx-2.2,-8.3,t-.1)),
+        box(7.6,3,5.7,(sx-2.2,5.3,t-.1)),
+        box(3,4.2,5.7,(sx-2.2,4.1,t-.1)),
     ]).rotate(z=switch_angle)
     base=base+guides
     refs={
@@ -194,7 +207,7 @@ def design(option):
         moving=bar.move(x=float(offset)).mesh
         assert (base.mesh ^ moving).volume()<1e-5, f'Bar insertion obstruction {option}, {offset}'
         assert (refs['esp'].mesh ^ moving).volume()<1e-5, f'Bar/board insertion obstruction {option}'
-    params={'switch_wall_thickness':3,'bar_back_wall_depth':2.8,'bar_back_wall_height':3.2,'pcb_channel_width':18.78,'pcb_channel_height':1.7,'pcb_contact_relief_per_face':.2,'front_stop_extra_clearance':.2,'switch_clear_width':10.4,'switch_arm_length':7.6,'switch_moved_outward':1,'bar_post_rear_wall_thickness':1.8,'bar_post_top_open':'flat section only','bar_post_roof':'sloped section retained','option_2_battery_placement_deferred':not large,'known_battery_intersections':known_battery_intersections,'battery_shelf_support':'full-width solid fill' if large else None,'bar_insertion_samples':73,'bar_insertion_check':'full rigid bar, including board notch, through both matching sockets','battery_tilt_degrees':8 if large else 0,'battery_bottom_catch':large,'battery_panel_size':[44,27,2] if large else None,'bar_slot_clearance':.2,'bar_profile':'constant extruded YZ section','pcb_notch_height':1.7,'bar_print_rotation_y':90,'switch_radial_inset_change':2,'battery_panel':large,'switch_cutout_height':5.6,'switch_guide_height':5.6,'usb_corner_radius':1.8,'usb_recess_border':1.0,'top_edge_radius':2.4,'usb_access_width':9.6,'usb_access_height':4.8,'insertion_samples':97,'diameter':D,'height':H,'usb_recess_back_y':front,'button_hole_nominal':hole,'button_hole_modeled':hole+.3,'battery_xyz':[42,bd,bh],'board_bottom_z':pcbz,'usb_opening_center_z':usb_z,'button_terminal_bottom_z':H-t-depth}
+    params={'switch_wall_thickness':3,'bar_back_wall_depth':2.8,'bar_back_wall_height':3.2,'pcb_channel_width':18.58,'pcb_channel_height':1.5,'pcb_contact_relief_per_face':.1,'front_stop_extra_clearance':.2,'switch_clear_width':10.6,'switch_arm_length':7.6,'switch_moved_outward':1,'bar_post_rear_wall_thickness':1.8,'bar_post_top_open':'flat section only','bar_post_roof':'sloped section retained','option_2_battery_placement_deferred':not large,'known_battery_intersections':known_battery_intersections,'battery_shelf_support':'full-width solid fill' if large else None,'bar_insertion_samples':73,'bar_insertion_check':'full rigid bar, including board notch, through both matching sockets','battery_tilt_degrees':8 if large else 0,'battery_bottom_catch':large,'battery_panel_size':[44,27,2] if large else None,'bar_slot_clearance':.2,'bar_profile':'constant extruded YZ section','pcb_notch_height':1.5,'bar_print_rotation_y':90,'switch_radial_inset_change':2,'battery_panel':large,'switch_cutout_height':5.6,'switch_guide_height':5.6,'usb_corner_radius':1.8,'usb_recess_border':1.0,'top_edge_radius':2.4,'usb_access_width':9.6,'usb_access_height':4.8,'insertion_samples':97,'diameter':D,'height':H,'usb_recess_back_y':front,'button_hole_nominal':hole,'button_hole_modeled':hole+.3,'battery_xyz':[42,bd,bh],'board_bottom_z':pcbz,'usb_opening_center_z':usb_z,'button_terminal_bottom_z':H-t-depth}
     return parts,refs,params
 
 def mesh(shape):

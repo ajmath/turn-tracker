@@ -4,11 +4,11 @@
       "switch_wall_thickness": 3,
       "bar_back_wall_depth": 2.8,
       "bar_back_wall_height": 3.2,
-      "pcb_channel_width": 18.78,
-      "pcb_channel_height": 1.7,
-      "pcb_contact_relief_per_face": 0.2,
+      "pcb_channel_width": 18.58,
+      "pcb_channel_height": 1.5,
+      "pcb_contact_relief_per_face": 0.1,
       "front_stop_extra_clearance": 0.2,
-      "switch_clear_width": 10.4,
+      "switch_clear_width": 10.6,
       "switch_arm_length": 7.6,
       "switch_moved_outward": 1,
       "bar_post_rear_wall_thickness": 1.8,
@@ -28,7 +28,7 @@
       ],
       "bar_slot_clearance": 0.2,
       "bar_profile": "constant extruded YZ section",
-      "pcb_notch_height": 1.7,
+      "pcb_notch_height": 1.5,
       "bar_print_rotation_y": 90,
       "switch_radial_inset_change": 2,
       "battery_panel": true,
@@ -58,11 +58,11 @@
       "switch_wall_thickness": 3,
       "bar_back_wall_depth": 2.8,
       "bar_back_wall_height": 3.2,
-      "pcb_channel_width": 18.78,
-      "pcb_channel_height": 1.7,
-      "pcb_contact_relief_per_face": 0.2,
+      "pcb_channel_width": 18.58,
+      "pcb_channel_height": 1.5,
+      "pcb_contact_relief_per_face": 0.1,
       "front_stop_extra_clearance": 0.2,
-      "switch_clear_width": 10.4,
+      "switch_clear_width": 10.6,
       "switch_arm_length": 7.6,
       "switch_moved_outward": 1,
       "bar_post_rear_wall_thickness": 1.8,
@@ -78,7 +78,7 @@
       "battery_panel_size": null,
       "bar_slot_clearance": 0.2,
       "bar_profile": "constant extruded YZ section",
-      "pcb_notch_height": 1.7,
+      "pcb_notch_height": 1.5,
       "bar_print_rotation_y": 90,
       "switch_radial_inset_change": 2,
       "battery_panel": false,
@@ -127,7 +127,7 @@
     },
     "option-1-base.stl": {
       "watertight": true,
-      "triangles": 4676,
+      "triangles": 5460,
       "bounds_mm": [
         [
           -45.0,
@@ -140,8 +140,8 @@
           29.347
         ]
       ],
-      "volume_mm3": 20351.479,
-      "bytes": 233884
+      "volume_mm3": 20291.262,
+      "bytes": 273084
     },
     "option-1-brace-bar.stl": {
       "watertight": true,
@@ -158,12 +158,12 @@
           30.0
         ]
       ],
-      "volume_mm3": 366.15,
+      "volume_mm3": 369.15,
       "bytes": 2284
     },
     "option-1-exploded.stl": {
       "watertight": true,
-      "triangles": 18202,
+      "triangles": 18986,
       "bounds_mm": [
         [
           -64.8,
@@ -176,12 +176,12 @@
           42.6
         ]
       ],
-      "volume_mm3": 66152.137,
-      "bytes": 910184
+      "volume_mm3": 66094.92,
+      "bytes": 949384
     },
     "option-1-component-layout-REFERENCE.stl": {
       "watertight": true,
-      "triangles": 61654,
+      "triangles": 62438,
       "bounds_mm": [
         [
           -45.0,
@@ -194,8 +194,8 @@
           42.6
         ]
       ],
-      "volume_mm3": 52895.677,
-      "bytes": 3082784
+      "volume_mm3": 52835.459,
+      "bytes": 3121984
     },
     "option-2-shell.stl": {
       "watertight": true,
@@ -217,7 +217,7 @@
     },
     "option-2-base.stl": {
       "watertight": true,
-      "triangles": 4542,
+      "triangles": 5300,
       "bounds_mm": [
         [
           -35.0,
@@ -230,8 +230,8 @@
           8.3
         ]
       ],
-      "volume_mm3": 10453.236,
-      "bytes": 227184
+      "volume_mm3": 10391.936,
+      "bytes": 265084
     },
     "option-2-brace-bar.stl": {
       "watertight": true,
@@ -248,12 +248,12 @@
           30.0
         ]
       ],
-      "volume_mm3": 366.15,
+      "volume_mm3": 369.15,
       "bytes": 2284
     },
     "option-2-exploded.stl": {
       "watertight": true,
-      "triangles": 18068,
+      "triangles": 18826,
       "bounds_mm": [
         [
           -54.8,
@@ -266,12 +266,12 @@
           35.6
         ]
       ],
-      "volume_mm3": 40893.1,
-      "bytes": 903484
+      "volume_mm3": 40834.8,
+      "bytes": 941384
     },
     "option-2-component-layout-REFERENCE.stl": {
       "watertight": true,
-      "triangles": 61704,
+      "triangles": 62462,
       "bounds_mm": [
         [
           -35.0,
@@ -284,8 +284,8 @@
           35.6
         ]
       ],
-      "volume_mm3": 23684.457,
-      "bytes": 3085284
+      "volume_mm3": 23623.157,
+      "bytes": 3123184
     }
   }
 }

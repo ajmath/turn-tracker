@@ -42,15 +42,16 @@ a full enclosure; printer tolerances can change the sliding fit.
 ### ESP mount and retaining bar
 
 The PCB underside sits 5.4 mm above the external bottom. The two rails provide
-18.78 mm clear width and a 1.7 mm high edge channel. Slide the board in from the
+18.58 mm clear width and a 1.5 mm high edge channel. Slide the board in from the
 center of the case, with the USB connector toward the side opening. The PCB's
 21 mm direction points toward USB. The mount assumes clear edges and no headers.
 
 The bar retains its original exterior profile and 30 mm length. Its PCB notch
-is enlarged from 1.3 to 1.7 mm high, with 0.2 mm more clearance on its rear contact
-face. The base side channels gain 0.2 mm per side and above/below the PCB; the
-front stop is relieved an extra 0.2 mm. These are initial fit adjustments after
-components arrived, and need another physical fit check.
+is 1.5 mm high. The base side channels are tightened by 0.1 mm on each of
+their four sides compared with the previous print, reducing the channel width
+from 18.78 to 18.58 mm and height from 1.7 to 1.5 mm. The bar notch also tightens
+by 0.1 mm above and below the PCB. The front stop retains its extra 0.2 mm
+clearance. Verify the revised fit on the first print.
 
 The socket roof is retained over the **sloped section**, which provides retention.
 Only the flat rear roof is removed. Rear walls remain 1.8 mm thick, built outward.
@@ -89,16 +90,19 @@ socket with 0.1 mm nominal assembly clearance. The metal cable plug enters the
 opening; check the cable housing stays clear outside it.
 
 The slide switch glues directly to the interior base between two L guides with
-inner faces 10.4 mm apart (0.4 mm wider). Both legs of each L are 3 mm thick, tripled from
+inner faces 10.6 mm apart, increased by 0.2 mm from the original 10.4 mm gap. Both legs of each L are 3 mm thick, tripled from
 1 mm. The rear pocket face is relieved 0.2 mm for fit. Long arms are shortened
 from 8.6 to 7.6 mm; both brackets move 1 mm radially toward the edge. Guides and shell cutout
 are 5.6 mm high. The bracket
 position is now inset 2 mm from the original layout. Verify actual flange, terminal
 and actuator geometry, especially actuator reach through the shell.
 
-Three underside screws attach the shell: 3.2 mm base holes and 2.5 mm pilots for
-provisional 3 mm self-tappers. Use about 6 mm engagement; select actual lengths
-and pilot sizes for the print. Add feet to clear screw heads.
+Use three M3 × 8 mm Phillips #1 flat-head machine screws per enclosure
+(DIN 965A, 90° countersunk, 0.5 mm thread pitch). The 8 mm length includes
+the head. Tap the printed 2.5 mm shell pilots with an M3 × 0.5 tap. Both
+bases have 3.2 mm through holes with 7.0 mm diameter, 90° underside
+countersinks so the heads can sit below the bottom surface. Check seating
+on the first print.
 
 ## Reference geometry and validation
 
